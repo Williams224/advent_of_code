@@ -58,6 +58,7 @@ class TestDayEighteen(unittest.TestCase):
                 vals=[0, 8, 7, 6, 9, 0, 9, 9, 1, 3, 5],
                 nests=[4, 4, 4, 4, 3, 4, 4, 4, 4, 3, 2],
             ).magnitude(),
+            50,
         )
 
     def test_addition(self):

@@ -12,6 +12,20 @@ class SnailFishNum:
             self.vals = vals
             self.nests = nests
 
+    #   def __str__(self):
+    #      desc = ""
+    #      for i in range(0, len(self.vals)):
+    #          if i == 0:
+    #              desc += "[" * self.nests[i]
+    #              desc += str(self.vals)
+    #          elif i > 0:#
+    #            if self.nests[i] > self.nests[i - 1]:
+    #                    desc += f",[{self.vals[i]}"
+    #                elif self.nests[i] == self.nests[i - 1]:
+    #                    desc += f",{self.vals[i]}"
+    #                else:
+    #                    desc += f"]"
+
     def _ingest(self, s):
         l_s = list(s)
         vals = []
@@ -37,7 +51,6 @@ class SnailFishNum:
         return SnailFishNum(vals=new_vals, nests=new_nests)
 
     def __add__(self, other):
-        self._addition(other.vals, other.nests)
         ret_fish = self._addition(other.vals, other.nests)
         ret_fish.redu()
         return ret_fish
@@ -49,28 +62,24 @@ class SnailFishNum:
 
         return False
 
-    def magnitude(self, tmp_vals=None, tmp_nests=None):
-        if tmp_vals == None and tmp_nests == None:
-            tmp_vals = self.vals
-            tmp_nests = self.nests
-        while len(tmp_vals) > 2:
-            i = 0
-            while i < len(tmp_vals):
-                if i < len(tmp_vals) - 1:
-                    # in a pair
-                    if tmp_nests[i] == tmp_nests[i + 1]:
-                        new_val = 3 * tmp_vals[i] + 2 * tmp_vals[i + 1]
-                        new_nest = tmp_nests[i] - 1
-                        del tmp_nests[i : i + 2]
-                        del tmp_vals[i : i + 2]
-                        tmp_vals.insert(i, new_val)
-                        tmp_nests.insert(i, new_nest)
-                        i += 1
-                    else:
-                        i += 1
-                else:
-                    i += 1
-        return 3 * tmp_vals[0] + 2 * tmp_vals[1]
+    def c_pair_val(self, l_val, r_val):
+        return 3 * l_val + 2 * r_val
+
+    def magnitude(self):
+        tmp_vals = self.vals
+        tmp_nests = self.nests
+        i = 0
+        while i < (len(tmp_nests) - 1):
+            if tmp_nests[i] == tmp_nests[i + 1]:
+                nest_level = tmp_nests[i]
+                pair_vals = tmp_vals[i : i + 2]
+                del tmp_vals[i : i + 2]
+                del tmp_nests[i : i + 2]
+                tmp_vals.insert(i, self.c_pair_val(pair_vals[0], pair_vals[1]))
+                tmp_nests.insert(i, nest_level - 1)
+            if len(tmp_vals) == 2:
+                return self.c_pair_val(tmp_vals[0], tmp_vals[1])
+            i += 1
 
     def redu(self):
         if self.explode():
@@ -131,8 +140,8 @@ if __name__ == "__main__":
 
         snf_list = list(map(lambda x: SnailFishNum(x.strip("\n")), lines))
 
-        result = reduce(lambda a, b: a + b, snf_list).magnitude()
-        print(result)
+        # result = reduce(lambda a, b: a + b, snf_list).magnitude()
+        # print(result)
 
         print("part two")
 
