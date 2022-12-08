@@ -14,4 +14,3 @@ if __name__ == "__main__":
 
     print(find_first_marker(input, 4))
     print(find_first_marker(input, 14))
-s
